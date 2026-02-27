@@ -10,7 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Correct filenames
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));
 
@@ -20,11 +19,11 @@ app.get('/', (req, res) => {
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('✅ MongoDB Connected');
+    console.log('MongoDB Connected');
     app.listen(process.env.PORT, () => {
-      console.log(`✅ Server running on http://localhost:${process.env.PORT}`);
+      console.log(`Server running on http://localhost:${process.env.PORT}`);
     });
   })
   .catch((err) => {
-    console.error('❌ MongoDB connection error:', err);
+    console.error('MongoDB connection error:', err);
   });
