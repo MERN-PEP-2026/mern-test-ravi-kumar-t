@@ -6,73 +6,232 @@ export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       await axios.post('http://localhost:5000/api/auth/register', form);
-      setSuccess('Registered successfully! Redirecting to login...');
+      setSuccess('Account created successfully!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>📚 Create Account</h2>
-        {error && <div style={styles.error}>{error}</div>}
-        {success && <div style={styles.success}>{success}</div>}
-        <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Full Name</label>
-            <input style={styles.input} name="name" placeholder="Enter your name"
-              required onChange={handleChange} />
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        .auth-page {
+          min-height: 100vh;
+          background: #fafafa;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'DM Sans', sans-serif;
+          padding: 2rem;
+        }
+
+        .auth-wrapper {
+          width: 100%;
+          max-width: 420px;
+          animation: fadeUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 2.5rem;
+          justify-content: center;
+        }
+
+        .auth-logo-icon {
+          width: 36px;
+          height: 36px;
+          background: #000;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 18px;
+        }
+
+        .auth-logo-text {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #000;
+          letter-spacing: -0.3px;
+        }
+
+        .auth-card {
+          background: #fff;
+          border: 1px solid #e8e8e8;
+          border-radius: 18px;
+          padding: 2.5rem;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        .auth-title {
+          font-size: 1.6rem;
+          font-weight: 600;
+          color: #000;
+          letter-spacing: -0.5px;
+          margin-bottom: 0.4rem;
+        }
+
+        .auth-subtitle {
+          font-size: 0.9rem;
+          color: #888;
+          margin-bottom: 2rem;
+          font-weight: 400;
+        }
+
+        .field {
+          margin-bottom: 1rem;
+        }
+
+        .field label {
+          display: block;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #555;
+          margin-bottom: 6px;
+          letter-spacing: 0.1px;
+          text-transform: uppercase;
+        }
+
+        .field input {
+          width: 100%;
+          padding: 12px 14px;
+          border: 1px solid #e0e0e0;
+          border-radius: 10px;
+          font-size: 0.95rem;
+          font-family: 'DM Sans', sans-serif;
+          background: #fafafa;
+          color: #000;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+
+        .field input:focus {
+          border-color: #000;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+        }
+
+        .field input::placeholder { color: #bbb; }
+
+        .submit-btn {
+          width: 100%;
+          padding: 13px;
+          background: #000;
+          color: #fff;
+          border: none;
+          border-radius: 10px;
+          font-size: 0.95rem;
+          font-weight: 500;
+          font-family: 'DM Sans', sans-serif;
+          cursor: pointer;
+          margin-top: 0.5rem;
+          transition: all 0.2s ease;
+          letter-spacing: 0.1px;
+        }
+
+        .submit-btn:hover { background: #222; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .alert {
+          padding: 11px 14px;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          margin-bottom: 1.2rem;
+        }
+
+        .alert-error { background: #fff1f1; color: #c00; border: 1px solid #ffd0d0; }
+        .alert-success { background: #f0faf4; color: #1a7a42; border: 1px solid #b6e8c9; }
+
+        .auth-footer {
+          text-align: center;
+          margin-top: 1.5rem;
+          font-size: 0.875rem;
+          color: #888;
+        }
+
+        .auth-footer a {
+          color: #000;
+          font-weight: 500;
+          text-decoration: none;
+        }
+
+        .auth-footer a:hover { text-decoration: underline; }
+
+        .divider {
+          height: 1px;
+          background: #f0f0f0;
+          margin: 1.5rem 0;
+        }
+      `}</style>
+
+      <div className="auth-page">
+        <div className="auth-wrapper">
+          <div className="auth-logo">
+            <div className="auth-logo-icon">📚</div>
+            <span className="auth-logo-text">CourseKit</span>
           </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Email</label>
-            <input style={styles.input} name="email" type="email"
-              placeholder="Enter your email" required onChange={handleChange} />
+
+          <div className="auth-card">
+            <h1 className="auth-title">Create account</h1>
+            <p className="auth-subtitle">Start managing your courses today</p>
+
+            {error && <div className="alert alert-error">{error}</div>}
+            {success && <div className="alert alert-success">{success}</div>}
+
+            <form onSubmit={handleSubmit}>
+              <div className="field">
+                <label>Full Name</label>
+                <input name="name" placeholder="Your full name" required onChange={handleChange} />
+              </div>
+              <div className="field">
+                <label>Email Address</label>
+                <input name="email" type="email" placeholder="you@example.com" required onChange={handleChange} />
+              </div>
+              <div className="field">
+                <label>Password</label>
+                <input name="password" type="password" placeholder="Min. 6 characters" required onChange={handleChange} />
+              </div>
+              <button className="submit-btn" type="submit" disabled={loading}>
+                {loading ? 'Creating account...' : 'Create account'}
+              </button>
+            </form>
+
+            <div className="divider" />
+
+            <div className="auth-footer">
+              Already have an account? <Link to="/login">Sign in</Link>
+            </div>
           </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Password</label>
-            <input style={styles.input} name="password" type="password"
-              placeholder="Enter password" required onChange={handleChange} />
-          </div>
-          <button style={styles.btn} type="submit">Register</button>
-        </form>
-        <p style={styles.linkText}>
-          Already have an account? <Link to="/login" style={styles.link}>Login here</Link>
-        </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
-
-const styles = {
-  container: { display:'flex', justifyContent:'center', alignItems:'center',
-    minHeight:'100vh', background:'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-  card: { background:'white', padding:'2.5rem', borderRadius:'12px',
-    width:'400px', boxShadow:'0 10px 30px rgba(0,0,0,0.2)' },
-  title: { textAlign:'center', marginBottom:'1.5rem', color:'#4f46e5' },
-  formGroup: { marginBottom:'1rem' },
-  label: { display:'block', marginBottom:'5px', fontWeight:'600', color:'#374151', fontSize:'0.9rem' },
-  input: { width:'100%', padding:'12px', borderRadius:'6px', border:'1px solid #d1d5db',
-    boxSizing:'border-box', fontSize:'1rem', outline:'none' },
-  btn: { width:'100%', padding:'12px', background:'#4f46e5', color:'white',
-    border:'none', borderRadius:'6px', cursor:'pointer', fontWeight:'bold',
-    fontSize:'1rem', marginTop:'0.5rem' },
-  error: { background:'#fee2e2', color:'#dc2626', padding:'10px',
-    borderRadius:'6px', marginBottom:'1rem', textAlign:'center' },
-  success: { background:'#dcfce7', color:'#16a34a', padding:'10px',
-    borderRadius:'6px', marginBottom:'1rem', textAlign:'center' },
-  linkText: { textAlign:'center', marginTop:'1rem', color:'#6b7280' },
-  link: { color:'#4f46e5', fontWeight:'600' }
-};
