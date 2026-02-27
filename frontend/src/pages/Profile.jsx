@@ -31,7 +31,7 @@ export default function Profile() {
   const headers  = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/auth/profile', { headers })
+    axios.get(`${import.meta.env.VITE_API_URL}/api/auth/profile`, { headers })
       .then(res => setProfile(res.data))
       .catch(err => {
         if (err.response?.status === 401) { localStorage.clear(); navigate('/login'); }

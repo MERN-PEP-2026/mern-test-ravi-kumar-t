@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+const API = import.meta.env.VITE_API_URL;
 
 function Toast({ toasts }) {
   return (
@@ -59,7 +60,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const token  = localStorage.getItem('token');
   const name   = localStorage.getItem('name');
-  const role   = localStorage.getItem('role'); // 'admin' or 'student'
+  const role   = localStorage.getItem('role');
   const userId = localStorage.getItem('userId');
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -73,9 +74,9 @@ export default function Dashboard() {
 
   const fetchCourses = useCallback(async (q = '') => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/courses?search=${q}`, { headers });
+      const res = await axios.get(`${API}/api/courses?search=${q}`, { headers });
       setCourses(res.data);
-    } catch {
+    } catch (err) {
       addToast('Failed to load courses', 'error');
     } finally {
       setLoading(false);
@@ -88,7 +89,7 @@ export default function Dashboard() {
     e.preventDefault();
     setAdding(true);
     try {
-      await axios.post('http://localhost:5000/api/courses', form, { headers });
+      await axios.post(`${API}/api/courses`, form, { headers });
       setForm({ courseName:'', courseDescription:'', instructor:'' });
       setShowForm(false);
       await fetchCourses(search);
@@ -108,7 +109,7 @@ export default function Dashboard() {
   const handleSaveEdit = async (id) => {
     setSavingId(id);
     try {
-      await axios.put(`http://localhost:5000/api/courses/${id}`, editForm, { headers });
+      await axios.put(`${API}/api/courses/${id}`, editForm, { headers });
       setEditId(null);
       await fetchCourses(search);
       addToast('Course updated!');
@@ -122,7 +123,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     setDeletingId(id);
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`, { headers });
+      await axios.delete(`${API}/api/courses/${id}`, { headers });
       await fetchCourses(search);
       addToast('Course deleted');
     } catch {
@@ -137,7 +138,7 @@ export default function Dashboard() {
   const handleEnroll = async (id) => {
     setEnrollingId(id);
     try {
-      await axios.post(`http://localhost:5000/api/courses/${id}/enroll`, {}, { headers });
+      await axios.post(`${API}/api/courses/${id}/enroll`, {}, { headers });
       await fetchCourses(search);
       addToast('Enrolled successfully! 🎉');
     } catch (err) {

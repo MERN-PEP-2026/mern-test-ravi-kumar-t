@@ -16,7 +16,7 @@ export default function Register() {
     setError('');
     setLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, form);
       setSuccess('Account created!');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
