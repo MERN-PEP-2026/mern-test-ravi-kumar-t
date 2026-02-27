@@ -1,7 +1,23 @@
 # Course Management System (MERN)
 
-A full-stack **Course Management System** built using the **MERN Stack (MongoDB, Express, React, Node.js)**.  
-The system supports **role-based access control** where **Admins manage courses** and **Students enroll in courses**.
+A full-stack **Course Management System** built using the **MERN Stack (MongoDB, Express, React, Node.js)**.
+
+The system supports **role-based access control** where:
+
+- **Admins** manage courses
+- **Students** enroll in courses
+
+---
+
+# Live Application
+
+### Frontend (Vercel)
+
+https://mern-test-ravi-kumar-t.vercel.app/
+
+### Backend API (Render)
+
+https://course-management-backend-988z.onrender.com
 
 ---
 
@@ -27,19 +43,22 @@ The system supports **role-based access control** where **Admins manage courses*
 ## UI Features
 - Responsive Dashboard
 - Toast Notifications
+- Loading Skeletons
 - Modern minimal UI
+- Protected routes
 
 ---
 
-# 🛠 Tech Stack
+# Tech Stack
 
-### Frontend
+## Frontend
 - React
 - React Router
 - Axios
+- Vite
 - CSS
 
-### Backend
+## Backend
 - Node.js
 - Express.js
 - MongoDB
@@ -47,12 +66,17 @@ The system supports **role-based access control** where **Admins manage courses*
 - JWT Authentication
 - bcryptjs
 
+## Deployment
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Database:** MongoDB Atlas
+
 ---
 
 # Project Structure
 
 ```
-course-management-system
+mern-test-ravi-kumar-t
 │
 ├── backend
 │   ├── middleware
@@ -71,6 +95,7 @@ course-management-system
 │   └── package.json
 │
 ├── frontend
+│   ├── public
 │   ├── src
 │   │   ├── pages
 │   │   │   ├── Login.jsx
@@ -88,25 +113,25 @@ course-management-system
 
 ---
 
-# Installation
+# Local Installation
 
 ## 1 Clone Repository
 
-```
+```bash
 git clone https://github.com/ravi-kumar-t/mern-test-ravi-kumar-t.git
 cd mern-test-ravi-kumar-t
 ```
 
 ---
 
-# 2️ Backend Setup
+# Backend Setup
 
-```
+```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file inside **backend** folder:
+Create `.env` file inside **backend** folder.
 
 ```
 PORT=5000
@@ -116,11 +141,11 @@ JWT_SECRET=your_secret_key
 
 Run backend:
 
-```
+```bash
 npm start
 ```
 
-Backend runs on:
+Backend will run at:
 
 ```
 http://localhost:5000
@@ -128,20 +153,38 @@ http://localhost:5000
 
 ---
 
-# 3️ Frontend Setup
+# Frontend Setup
 
-Open another terminal:
+Open another terminal.
 
-```
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Frontend runs on:
+Frontend runs at:
 
 ```
 http://localhost:5173
+```
+
+---
+
+# Environment Variables
+
+Frontend `.env`
+
+```
+VITE_API_URL=https://course-management-backend-988z.onrender.com
+```
+
+Backend `.env`
+
+```
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
 ```
 
 ---
@@ -181,29 +224,34 @@ DELETE /api/courses/:id/leave
 
 # Deployment
 
-Frontend: **Vercel**  
-Backend: **Render**  
-Database: **MongoDB Atlas**
+### Frontend
+Deployed on **Vercel**
+
+### Backend
+Deployed on **Render**
+
+### Database
+Hosted on **MongoDB Atlas**
 
 ---
 
-#  Author
+# Author
 
-**Ravi Kumar Tekkali**  
+**Ravi Kumar Tekkali**
+
 B.Tech Computer Science Engineering  
-Lovely Professional University  
+Lovely Professional University
 
-GitHub:  
+GitHub  
 https://github.com/ravi-kumar-t
 
 ---
 
-# ⭐ Future Improvements
+# Future Improvements
 
 - Course progress tracking
 - Admin analytics dashboard
-- Search & filtering
+- Course search & filtering
 - Pagination
 - Email notifications
-
----
+- Course categories

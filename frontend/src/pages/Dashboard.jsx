@@ -151,7 +151,7 @@ export default function Dashboard() {
   const handleLeave = async (id) => {
     setEnrollingId(id);
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}/leave`, { headers });
+      await axios.delete(`${API}/api/courses/${id}/leave`, { headers });
       await fetchCourses(search);
       addToast('Left course');
     } catch (err) {
